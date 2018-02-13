@@ -56,7 +56,7 @@ public class Robot extends IterativeRobot {
 			gear.set(DoubleSolenoid.Value.kReverse);
 		}
 
-		drive.arcadeDrive(driver.getRawAxis(1), driver.getRawAxis(4), true);
+		drive.arcadeDrive(-driver.getRawAxis(1), driver.getRawAxis(4), true);
 	}
 
 	@Override
