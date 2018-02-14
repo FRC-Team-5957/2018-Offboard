@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team5957.robot;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -22,20 +23,33 @@ public class Robot extends IterativeRobot {
 	DoubleSolenoid gear;
 	Compressor compressor;
 	Joystick driver;
+	ADXRS450_Gyro gyro;
+	final boolean oki = true;
+
+	final double kP = 0.05;
 
 	@Override
 	public void robotInit() {
 
-		frontLeft = new VictorSP(0);
-		rearLeft = new VictorSP(1);
-		frontRight = new VictorSP(2);
-		rearRight = new VictorSP(3);
+		if (oki) {
+			frontLeft = new VictorSP(2);
+			rearLeft = new VictorSP(3);
+			frontRight = new VictorSP(0);
+			rearRight = new VictorSP(1);
+		} else {
+			frontLeft = new VictorSP(0);
+			rearLeft = new VictorSP(1);
+			frontRight = new VictorSP(2);
+			rearRight = new VictorSP(3);
+		}
 		drive = new DifferentialDrive(new SpeedControllerGroup(frontLeft, rearLeft),
 				new SpeedControllerGroup(frontRight, rearRight));
-		gear = new DoubleSolenoid(0, 0, 1);
 		driver = new Joystick(0);
+		gear = new DoubleSolenoid(0, 0, 1);
 		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(true);
+		gyro = new ADXRS450_Gyro();
+		gyro.reset();
 
 	}
 
@@ -45,6 +59,10 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousPeriodic() {
+
+		// TODO: add a dashboard 'double' input to change target angle
+		drive.arcadeDrive(0, -gyro.getAngle() * kP);
+
 	}
 
 	@Override
