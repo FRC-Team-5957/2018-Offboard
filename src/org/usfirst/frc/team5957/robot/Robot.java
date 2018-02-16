@@ -20,44 +20,24 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class Robot extends IterativeRobot {
 
-	VictorSP frontLeft, rearLeft, frontRight, rearRight;
-	DifferentialDrive drive;
-	Solenoid gear;
+	DriveTrain drive;
 	Compressor compressor;
 	Joystick driver;
-	ADXRS450_Gyro gyro;
 	Encoder left;
 	Timer timer;
 	final boolean oki = true;
-
-	// Enviro. variables
-	final double kP = 0.03;
-	double targetAngle;
-	double targetDistance;
-	double drivePower;
 
 	@Override
 	public void robotInit() {
 
 		if (oki) {
-			frontLeft = new VictorSP(2);
-			rearLeft = new VictorSP(3);
-			frontRight = new VictorSP(0);
-			rearRight = new VictorSP(1);
+			drive = new DriveTrain(2, 3, 0, 1, 0, 0);
 		} else {
-			frontLeft = new VictorSP(0);
-			rearLeft = new VictorSP(1);
-			frontRight = new VictorSP(2);
-			rearRight = new VictorSP(3);
+			drive = new DriveTrain(0, 1, 2, 3, 0, 0);
 		}
-		drive = new DifferentialDrive(new SpeedControllerGroup(frontLeft, rearLeft),
-				new SpeedControllerGroup(frontRight, rearRight));
 		driver = new Joystick(0);
-		gear = new Solenoid(0, 0);
 		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(true);
-		gyro = new ADXRS450_Gyro();
-		gyro.reset();
 		timer = new Timer();
 		timer.reset();
 
@@ -67,12 +47,11 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		gyro.reset();
 		timer.reset();
-		setDrive(gyro.getAngle(), 0);
+		drive.brake();
 		Timer.delay(0.5);
 		setDrive(90, 0.4);
-		
+
 		// Check to see that this works, must drive at least remotely straight
 		// Follow Simbotics PID Tutorial to further tune adjustment
 
@@ -83,7 +62,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 
-		drive.arcadeDrive(drivePower, targetAngle - gyro.getAngle() * kP);
+		// drive does something
 
 		// if (timer.get() == 0) {
 		// timer.reset();
@@ -97,13 +76,6 @@ public class Robot extends IterativeRobot {
 		// turnByTime(-90, 11.01, 13);
 		//
 		// }
-	}
-
-	public void setDrive(double angle, double power) {
-
-		targetAngle = angle;
-		drivePower = power;
-
 	}
 
 	@Override
