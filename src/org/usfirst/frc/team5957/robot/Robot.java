@@ -7,16 +7,11 @@
 
 package org.usfirst.frc.team5957.robot;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class Robot extends IterativeRobot {
 
@@ -50,7 +45,9 @@ public class Robot extends IterativeRobot {
 		timer.reset();
 		drive.brake();
 		Timer.delay(0.5);
-		setDrive(90, 0.4);
+		drive.setCourse(0.5, 0);
+		Timer.delay(1.5);
+		drive.brake();
 
 		// Check to see that this works, must drive at least remotely straight
 		// Follow Simbotics PID Tutorial to further tune adjustment
@@ -82,12 +79,13 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 
 		if (driver.getRawButton(5)) {
-			gear.set(true);
+			drive.setGear(false);
 		} else if (driver.getRawButton(6)) {
-			gear.set(false);
+			drive.setGear(true);
 		}
 
-		drive.arcadeDrive(-driver.getRawAxis(1), driver.getRawAxis(4), true);
+		drive.drive(-driver.getRawAxis(1), driver.getRawAxis(4));
+
 	}
 
 	@Override
