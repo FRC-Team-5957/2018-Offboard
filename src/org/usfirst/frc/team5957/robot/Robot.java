@@ -15,20 +15,20 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class Robot extends IterativeRobot {
 
-	DriveTrain drive;
-	Compressor compressor;
-	Joystick driver;
-	Encoder left;
-	Timer timer;
+	static DriveTrain drive;
+	static Compressor compressor;
+	static Joystick driver;
+	static Encoder left;
+	static Timer timer;
 	final boolean oki = true;
 
 	@Override
 	public void robotInit() {
 
 		if (oki) {
-			drive = new DriveTrain(2, 3, 0, 1, 0, 0);
+			drive = new DriveTrain(2, 3, 0, 1, 0, 0, driver);
 		} else {
-			drive = new DriveTrain(0, 1, 2, 3, 0, 0);
+			drive = new DriveTrain(0, 1, 2, 3, 0, 0, driver);
 		}
 		driver = new Joystick(0);
 		compressor = new Compressor(0);
@@ -51,28 +51,11 @@ public class Robot extends IterativeRobot {
 
 		// Check to see that this works, must drive at least remotely straight
 		// Follow Simbotics PID Tutorial to further tune adjustment
-
-		// Can't drive and adjust from init method; driving will have to be done with
-		// power/angle variable adjustment through periodic method
 	}
 
 	@Override
 	public void autonomousPeriodic() {
 
-		// drive does something
-
-		// if (timer.get() == 0) {
-		// timer.reset();
-		// timer.start();
-		// } else {
-		// driveByTime(0.5, 0.01, 3);
-		// turnByTime(-90, 3.01, 5);
-		// driveByTime(0.5, 5.01, 7);
-		// turnByTime(-90, 7.01, 9);
-		// driveByTime(0.5, 9.01, 11);
-		// turnByTime(-90, 11.01, 13);
-		//
-		// }
 	}
 
 	@Override
@@ -84,76 +67,11 @@ public class Robot extends IterativeRobot {
 			drive.setGear(true);
 		}
 
-		drive.drive(-driver.getRawAxis(1), driver.getRawAxis(4));
-
+		drive.teleopDrive(-driver.getRawAxis(1), driver.getRawAxis(4));
 	}
 
 	@Override
 	public void testPeriodic() {
 	}
-
-	// private void driveForward(double time) {
-	// gyro.reset();
-	// double angle = gyro.getAngle();
-	// timer.reset();
-	// timer.start();
-	// while (timer.get() < time) {
-	// drive.arcadeDrive(0.5, (angle - gyro.getAngle()) * kP);
-	// }
-	//
-	// }
-	//
-	// private void turnToAngle(double angle) {
-	// gyro.reset();
-	// timer.reset();
-	// while (gyro.getAngle() != angle) {
-	// drive.arcadeDrive(0, 0.2 * (angle - gyro.getAngle()) * kP);
-	// }
-	// }
-	//
-	// private void driveByTime(double pow, double sT, double eT) {
-	// gyro.reset();
-	// double angle = gyro.getAngle();
-	// while (timer.get() > sT && timer.get() < eT) {
-	// drive.arcadeDrive(pow, (angle - gyro.getAngle()) * kP);
-	// }
-	// }
-	//
-	// private void turnByTime(double angle, double sT, double eT) {
-	// gyro.reset();
-	// while (timer.get() > sT && timer.get() < eT) {
-	// if (angle < 0) {
-	// drive.arcadeDrive(0, (angle - gyro.getAngle()) * kP, true);
-	// } else {
-	// drive.arcadeDrive(0, (angle - 180 + gyro.getAngle()) * kP, true);
-	// }
-	// }
-	// }
-	//
-	// // Test on robot
-	// boolean didIt = true;
-	// boolean ready = true;
-	// double autoSpeed = 0.5;
-	// double turnSpeed = 0.75;
-	//
-	// private void reset() throws InterruptedException {
-	// didIt = false;
-	// if (didIt == false && left.getStopped()) {
-	// didIt = true;
-	// ready = true;
-	// wait(100);
-	// }
-	// }
-	//
-	// private void forward(double t) {
-	// if (ready == true) {
-	// double angle = gyro.getAngle();
-	// timer.reset();
-	// timer.start();
-	// }
-	// while (timer.get() < t) {
-	// // TODO finish
-	// }
-	// }
 
 }
