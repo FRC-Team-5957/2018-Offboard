@@ -72,7 +72,7 @@ public class Robot extends IterativeRobot {
 		setDrive(gyro.getAngle(), 0);
 		Timer.delay(0.5);
 		setDrive(90, 0.4);
-		
+
 		// Check to see that this works, must drive at least remotely straight
 		// Follow Simbotics PID Tutorial to further tune adjustment
 
@@ -110,12 +110,12 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 
 		if (driver.getRawButton(5)) {
-			gear.set(true);
-		} else if (driver.getRawButton(6)) {
 			gear.set(false);
+		} else if (driver.getRawButton(6)) {
+			gear.set(true);
 		}
 
-		drive.arcadeDrive(-driver.getRawAxis(1), driver.getRawAxis(4), true);
+		drive.arcadeDrive(driver.getRawAxis(1), driver.getRawAxis(4), true);
 	}
 
 	@Override
